@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 // Estilos inyectados
+
 const styles = `
 body {
   margin: 0;
@@ -16,25 +17,154 @@ body {
   margin: auto;
 }
 .main { flex: 3; min-width: 300px; }
-.header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 15px 20px; background: #4f46e5; color: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  background: #4f46e5;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
 .header h1 { margin: 0; font-size: 1.8rem; }
 .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-.card { background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
 .card:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.12); }
 .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
 .card h3 { margin: 12px 0 5px; font-size: 1.1rem; color: #333; }
 .card p { margin: 0; color: #555; font-weight: bold; }
-.card button { margin-top: auto; padding: 10px; border: none; border-radius: 10px; background: #4f46e5; color: white; font-weight: bold; cursor: pointer; transition: background 0.3s; }
-.card button:hover { background: #3730a3; }
-.sidebar { flex: 1; min-width: 250px; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); height: fit-content; }
-.sidebar h2 { margin-top: 0; font-size: 1.4rem; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
-.cart-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; }
-.cart-item-info { flex: 1; }
-.cart-remove { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.cart-total { margin-top: 15px; font-weight: bold; font-size: 1.2rem; }
-@media(max-width:768px){ .app { flex-direction: column; } .sidebar { order: 2; margin-top: 20px; } .main { order: 1; } }
+.card button {
+  margin-top: auto;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #6366f1;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.card button:hover {
+  background: #4f46e5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+/* ----------------- Carrito flotante compacto ----------------- */
+.sidebar {
+  position: sticky;
+  top: 20px;
+  flex: 1;
+  min-width: 260px;
+  max-width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: linear-gradient(145deg, #ffffff, #f9f9f9);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(100,100,100,0.3);
+  border-radius: 3px;
+}
+.sidebar h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 6px;
+  border-radius: 10px;
+  background: #f5f5f5;
+  transition: background 0.2s;
+}
+.cart-item:hover { background: #e5e7eb; }
+.cart-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+.cart-item-info div { font-weight: 600; color: #111827; font-size: 0.9rem; }
+.cart-item-info small { font-weight: 400; color: #6b7280; font-size: 0.8rem; }
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+.quantity-controls button {
+  padding: 2px 6px;
+  border: none;
+  border-radius: 6px;
+  background: #4f46e5;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.2s, transform 0.2s;
+}
+.quantity-controls button:hover {
+  background: #3730a3;
+  transform: scale(1.1);
+}
+.cart-remove {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.8rem;
+  transition: background 0.2s, transform 0.2s;
+}
+.cart-remove:hover { background: #dc2626; transform: scale(1.1); }
+.cart-total {
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-align: right;
+  color: #111827;
+}
+
+@media(max-width:768px){
+  .app { flex-direction: column; }
+  .sidebar {
+    position: relative;
+    width: 100%;
+    max-height: none;
+    order: 2;
+    margin-top: 20px;
+  }
+  .main { order: 1; }
+}
 `;
+
 
 function injectStyles() {
   if (document.getElementById("app-styles")) return;
